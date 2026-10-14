@@ -8,36 +8,20 @@ export const Navbar: React.FC = () => {
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-3 sm:py-3.5 px-3 sm:px-5 md:px-8 lg:px-10 xl:px-12 bg-transparent"
+      className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-3 sm:py-3.5 px-4 sm:px-6 lg:px-8 bg-transparent"
     >
-      <div className="w-full relative flex items-center justify-between">
+      <div className="max-w-7xl mx-auto flex items-center justify-between">
         
-        {/* ================= FAR LEFT: Compact Navigation Links Capsule ================= */}
-        <nav
-          className="hidden lg:flex items-center gap-0.5 p-1 px-1.5 rounded-full bg-slate-950/90 backdrop-blur-md border border-slate-800/80 shadow-[0_4px_16px_rgba(2,6,23,0.35)]"
-          aria-label="Main Navigation"
-        >
-          {NAV_ITEMS.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              className="px-2.5 py-1 text-xs font-semibold text-slate-300 hover:text-white rounded-full hover:bg-slate-800/80 transition-all duration-150 whitespace-nowrap tracking-tight"
-            >
-              {item.label}
-            </a>
-          ))}
-        </nav>
-
-        {/* ================= CENTER: Brand Identity Logo ================= */}
+        {/* ================= LEFT: Brand Identity (Custom MQ Logo) ================= */}
         <a
           href="#"
-          className="hidden lg:flex items-center absolute left-1/2 -translate-x-1/2 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 rounded-lg py-1 group"
+          className="flex items-center group focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 rounded-lg py-1"
           aria-label="Mohammed Qais — Portfolio Home"
         >
           <img
             src="/images/mq-logo.png"
             alt="Mohammed Qais Logo"
-            className="h-6 sm:h-7 w-auto object-contain transition-transform duration-200 group-hover:scale-105 select-none"
+            className="h-6 sm:h-7 md:h-8 w-auto object-contain transition-transform duration-200 group-hover:scale-105 select-none"
             style={{
               imageRendering: '-webkit-optimize-contrast',
               transform: 'translateZ(0)',
@@ -46,48 +30,41 @@ export const Navbar: React.FC = () => {
           />
         </a>
 
-        {/* ================= FAR RIGHT: Compact 'Let's Talk' Button ================= */}
-        <div className="hidden lg:flex items-center">
+        {/* ================= RIGHT: Merged Navigation Capsule & CTA (Subtle Glassmorphism) ================= */}
+        <nav
+          className="hidden lg:flex items-center gap-1 xl:gap-1.5 p-1.5 pl-3.5 sm:pl-4 rounded-full bg-slate-950/80 backdrop-blur-xl border border-white/15 shadow-[0_8px_32px_rgba(15,23,42,0.25),inset_0_1px_0.5px_rgba(255,255,255,0.18)] transition-all duration-300"
+          aria-label="Main Navigation"
+        >
+          {NAV_ITEMS.map((item) => (
+            <a
+              key={item.label}
+              href={item.href}
+              className="px-3 py-1.5 text-[13px] font-medium text-slate-300 hover:text-white rounded-full hover:bg-white/10 transition-all duration-150"
+            >
+              {item.label}
+            </a>
+          ))}
+
+          {/* Merged CTA Button inside the capsule */}
           <a
             href="#contact"
-            className="relative inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-violet-600 hover:bg-violet-700 text-white text-xs font-bold hover:shadow-md hover:shadow-violet-600/30 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 active:scale-95 shadow-sm shadow-violet-500/20 group overflow-hidden"
+            className="ml-1 inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-violet-600 hover:bg-violet-700 text-white text-[13px] font-semibold hover:shadow-md hover:shadow-violet-500/25 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-400 active:scale-98 shadow-xs shadow-violet-500/20 group"
           >
-            {/* Top Gloss Arc */}
-            <span className="absolute inset-x-2 top-0.5 h-[45%] rounded-t-full bg-gradient-to-b from-white/35 to-transparent pointer-events-none" />
-            <span className="relative z-10 tracking-tight">Let's Talk</span>
-            <ArrowRight className="relative z-10 w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
+            <span>Let's Talk</span>
+            <ArrowRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5" />
           </a>
-        </div>
+        </nav>
 
-        {/* ================= MOBILE VIEW (LOGO ON LEFT, HAMBURGER ON RIGHT) ================= */}
-        <div className="lg:hidden flex items-center justify-between w-full">
-          <a
-            href="#"
-            className="flex items-center focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 rounded-lg py-1 group"
-            aria-label="Mohammed Qais — Portfolio Home"
-          >
-            <img
-              src="/images/mq-logo.png"
-              alt="Mohammed Qais Logo"
-              className="h-6 sm:h-7 w-auto object-contain transition-transform duration-200 group-hover:scale-105 select-none"
-              style={{
-                imageRendering: '-webkit-optimize-contrast',
-                transform: 'translateZ(0)',
-                backfaceVisibility: 'hidden',
-              }}
-            />
-          </a>
-
-          <button
-            type="button"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 rounded-xl text-slate-800 hover:text-slate-950 hover:bg-slate-100/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 transition-colors"
-            aria-expanded={mobileMenuOpen}
-            aria-label="Toggle navigation menu"
-          >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
-        </div>
+        {/* ================= MOBILE: Hamburger Menu Button ================= */}
+        <button
+          type="button"
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="lg:hidden p-2 rounded-xl text-slate-700 hover:text-slate-900 hover:bg-slate-100/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-violet-600 transition-colors"
+          aria-expanded={mobileMenuOpen}
+          aria-label="Toggle navigation menu"
+        >
+          {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
       </div>
 
       {/* ================= MOBILE: Drawer Menu ================= */}
@@ -98,7 +75,7 @@ export const Navbar: React.FC = () => {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.25, ease: 'easeInOut' }}
-            className="lg:hidden overflow-hidden rounded-2xl mt-2 border border-slate-800/90 bg-slate-950/95 backdrop-blur-md px-4 pt-3 pb-5 shadow-xl shadow-slate-950/30"
+            className="lg:hidden overflow-hidden rounded-2xl mt-2 border border-white/15 bg-slate-950/85 backdrop-blur-xl px-4 pt-3 pb-5 shadow-xl shadow-slate-950/30"
           >
             <div className="flex flex-col gap-1.5">
               {NAV_ITEMS.map((item) => (
