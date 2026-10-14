@@ -3,7 +3,7 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { PROJECTS_SECTION_DATA, PROJECTS_LIST, ProjectItem } from '../data/portfolioData';
 
-// Double the list for seamless 360-degree circular infinite wheel (12 cards, 30 deg each)
+// Double the list for a seamless 360-degree circular infinite wheel (12 cards, 30 deg each)
 const WHEEL_CARDS = [...PROJECTS_LIST, ...PROJECTS_LIST];
 const STEP_ANGLE = 360 / WHEEL_CARDS.length; // 30 deg
 
@@ -16,12 +16,22 @@ export const ProjectsSection: React.FC = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [dragStartX, setDragStartX] = useState(0);
   const [dragStartAngle, setDragStartAngle] = useState(0);
+  const [viewportWidth, setViewportWidth] = useState(
+    typeof window !== 'undefined' ? window.innerWidth : 1440
+  );
 
   const angleRef = useRef(0);
   const isHoveredRef = useRef(false);
   isHoveredRef.current = isHovered;
 
-  // Continuous animation loop: Left-to-Right infinite roll
+  // Track window resize to ensure full-bleed edge-to-edge radius calculation
+  useEffect(() => {
+    const handleResize = () => setViewportWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Continuous animation loop: Left-to-Right infinite roll across entire screen
   useEffect(() => {
     if (shouldReduceMotion) return;
 
@@ -33,8 +43,8 @@ export const ProjectsSection: React.FC = () => {
       lastTime = now;
 
       if (!isHoveredRef.current) {
-        // Continuous left-to-right rotation (~8 degrees per second)
-        angleRef.current = (angleRef.current + 0.012 * delta) % 360;
+        // Continuous left-to-right drift (~7.5 degrees per second)
+        angleRef.current = (angleRef.current + 0.011 * delta) % 360;
         setAngle(angleRef.current);
       }
 
@@ -78,7 +88,7 @@ export const ProjectsSection: React.FC = () => {
   const handlePointerMove = (e: React.PointerEvent) => {
     if (!isDragging) return;
     const deltaX = e.clientX - dragStartX;
-    angleRef.current = (dragStartAngle + deltaX * 0.15) % 360;
+    angleRef.current = (dragStartAngle + deltaX * 0.12) % 360;
     setAngle(angleRef.current);
   };
 
@@ -86,15 +96,17 @@ export const ProjectsSection: React.FC = () => {
     setIsDragging(false);
   };
 
+  // Dynamic radius that scales with viewport width so cards glide across the true screen edges
+  const radius = Math.max(720, Math.min(1150, viewportWidth * 0.65));
+
   return (
     <section
       id="projects"
-      className="relative w-full py-16 sm:py-20 lg:py-24 bg-[#FAF9F6] overflow-hidden select-none"
+      className="relative w-full py-16 sm:py-20 lg:py-24 bg-[#FAF9F6] overflow-x-hidden select-none"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* ================= SECTION HEADER ================= */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-12 gap-4">
+      {/* ================= SECTION HEADER ================= */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 sm:mb-10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
             {/* Section Eyebrow */}
             <div className="flex items-center gap-2 mb-2.5">
@@ -125,174 +137,177 @@ export const ProjectsSection: React.FC = () => {
             <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
           </a>
         </div>
+      </div>
 
-        {/* ================= CURVED ARC TURNTABLE / INFINITE ROLL STAGE ================= */}
-        <div
-          className="relative w-full h-[380px] sm:h-[440px] md:h-[480px] flex items-center justify-center overflow-x-clip"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => {
-            setIsHovered(false);
-            setHoveredCardIdx(null);
-            setIsDragging(false);
-          }}
-          onPointerDown={handlePointerDown}
-          onPointerMove={handlePointerMove}
-          onPointerUp={handlePointerUp}
-          onPointerCancel={handlePointerUp}
-          style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
-        >
-          {/* Subtle Ambient Radial Glow */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-radial from-violet-200/40 via-violet-100/10 to-transparent blur-3xl pointer-events-none" />
+      {/* ================= FULL-SCREEN EDGE-TO-EDGE INFINITE ROLL STAGE ================= */}
+      <div
+        className="relative w-screen left-1/2 -translate-x-1/2 h-[420px] sm:h-[480px] md:h-[530px] flex items-center justify-center overflow-x-hidden"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => {
+          setIsHovered(false);
+          setHoveredCardIdx(null);
+          setIsDragging(false);
+        }}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
+        style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
+      >
+        {/* Ambient Radial Lighting in Center */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-radial from-violet-200/50 via-violet-100/15 to-transparent blur-3xl pointer-events-none" />
 
-          {/* ================= CIRCULAR DIAL / COMPASS DISC (Behind the Cards) ================= */}
-          <div className="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 w-[280px] sm:w-[360px] md:w-[420px] aspect-square rounded-full border border-slate-300/80 pointer-events-none flex items-center justify-center">
-            {/* Concentric Dashed Ring */}
-            <div className="absolute inset-4 rounded-full border border-dashed border-slate-300/60" />
-            
-            {/* Center Pointer Marking with "ME" / "PROJECTS" */}
-            <div className="absolute top-3 flex flex-col items-center text-slate-800">
-              <span className="text-[10px] font-black tracking-widest text-violet-600">▲</span>
-              <span className="text-[9px] font-mono font-bold tracking-[0.25em] uppercase text-slate-500">
-                PORTFOLIO
-              </span>
-            </div>
-
-            {/* Rotating Decorative Compass SVG Ring */}
-            <svg
-              className="w-full h-full animate-[spin_60s_linear_infinite]"
-              viewBox="0 0 400 400"
-              style={{ animationPlayState: isHovered ? 'paused' : 'running' }}
-            >
-              <defs>
-                <path
-                  id="portfolioCirclePath"
-                  d="M 200, 200 m -160, 0 a 160,160 0 1,1 320,0 a 160,160 0 1,1 -320,0"
-                />
-              </defs>
-              <text className="text-[10px] font-mono tracking-[0.28em] uppercase fill-slate-400 font-semibold">
-                <textPath href="#portfolioCirclePath" startOffset="0%">
-                  PORTFOLIO • SELECTED WORK • AI GENERALIST • QDELTA TECH • MOHAMMED QAIS • 
-                </textPath>
-              </text>
-            </svg>
+        {/* ================= CIRCULAR DIAL DISC (Behind the Cards) ================= */}
+        <div className="absolute bottom-6 sm:bottom-10 left-1/2 -translate-x-1/2 w-[320px] sm:w-[420px] md:w-[480px] aspect-square rounded-full border border-slate-300/80 pointer-events-none flex items-center justify-center">
+          {/* Concentric Dashed Ring */}
+          <div className="absolute inset-5 rounded-full border border-dashed border-slate-300/70" />
+          
+          {/* Center Pointer Marking with "ME" / "PROJECTS" */}
+          <div className="absolute top-3.5 flex flex-col items-center text-slate-800">
+            <span className="text-xs font-black tracking-widest text-violet-600">▲</span>
+            <span className="text-[10px] font-mono font-bold tracking-[0.25em] uppercase text-slate-600">
+              ME
+            </span>
           </div>
 
-          {/* ================= THE FANNED PLAYING CARDS (Infinite Arc Roll) ================= */}
-          <div className="absolute top-4 sm:top-6 left-1/2 -translate-x-1/2 w-full max-w-5xl h-full flex items-center justify-center pointer-events-none">
-            {WHEEL_CARDS.map((project, idx) => {
-              // Calculate angular position on the virtual cylinder/arc
-              const rawAngle = (angle + idx * STEP_ANGLE) % 360;
-              const normalizedAngle = ((rawAngle + 180) % 360) - 180; // range [-180, 180]
-
-              // Only render cards currently within the visible front hemisphere (-75 deg to +75 deg)
-              if (Math.abs(normalizedAngle) > 75) return null;
-
-              // Arc Radius
-              const radius = 540; // in px
-              const rad = (normalizedAngle * Math.PI) / 180;
-              const x = radius * Math.sin(rad);
-              const y = radius * (1 - Math.cos(rad)) * 0.72; // slight flattening for ultra-graceful dome
-
-              // Tangential tilt angle
-              const rotateDeg = normalizedAngle * 0.85;
-
-              // Smooth fade at the edges of the arc
-              const opacity = Math.max(0, 1 - Math.pow(Math.abs(normalizedAngle) / 68, 2.5));
-
-              // Depth layer: cards closest to apex (0 deg) have highest z-index
-              const isHoveredCard = hoveredCardIdx === idx;
-              const zIndex = isHoveredCard ? 60 : Math.round(50 - Math.abs(normalizedAngle));
-
-              return (
-                <div
-                  key={`${project.id}-${idx}`}
-                  onMouseEnter={() => setHoveredCardIdx(idx)}
-                  className="absolute pointer-events-auto transition-transform duration-200 ease-out origin-bottom cursor-pointer"
-                  style={{
-                    transform: `translate3d(calc(-50% + ${x}px), ${y}px, 0) rotate(${rotateDeg}deg) scale(${
-                      isHoveredCard ? 1.06 : 1
-                    })`,
-                    zIndex,
-                    opacity,
-                  }}
-                >
-                  {/* Card Container: Tarot / Poster Aspect Ratio matching reference */}
-                  <div
-                    className={`relative w-[190px] sm:w-[230px] md:w-[250px] h-[270px] sm:h-[320px] md:h-[350px] rounded-3xl overflow-hidden border transition-all duration-300 ${
-                      isHoveredCard
-                        ? 'border-violet-500 ring-4 ring-violet-500/25 shadow-[0_25px_60px_-10px_rgba(124,58,237,0.45)] -translate-y-4'
-                        : 'border-slate-800/80 shadow-[0_16px_36px_rgba(15,23,42,0.22)]'
-                    } bg-slate-950 flex flex-col justify-between p-3.5 sm:p-4 text-white group`}
-                  >
-                    {/* Top Status & Index Badge */}
-                    <div className="relative z-10 flex items-center justify-between">
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold tracking-wider uppercase bg-white/15 backdrop-blur-md text-white border border-white/20">
-                        {project.tags[0] || 'FEATURED'}
-                      </span>
-                      <span className="text-[10px] font-mono font-bold text-slate-400">
-                        0{((idx % PROJECTS_LIST.length) + 1)}
-                      </span>
-                    </div>
-
-                    {/* Centered Artwork / Project Screenshot Thumbnail */}
-                    <div className="absolute inset-0 w-full h-full overflow-hidden">
-                      <img
-                        src={project.image}
-                        alt={project.title}
-                        className={`w-full h-full object-cover object-top transition-transform duration-500 ${
-                          isHoveredCard ? 'scale-110 brightness-105' : 'scale-100 brightness-95'
-                        }`}
-                        loading="lazy"
-                      />
-                      {/* Gradient Vignette Overlay for rich contrast */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-950/20" />
-                    </div>
-
-                    {/* Bottom Title & Glint on Card */}
-                    <div className="relative z-10 pt-4">
-                      <h3 className="text-base sm:text-lg font-black tracking-tight text-white line-clamp-1 drop-shadow-md">
-                        {project.title}
-                      </h3>
-                      <p className="text-[11px] text-slate-300 font-medium line-clamp-1 drop-shadow-sm mt-0.5">
-                        {project.description}
-                      </p>
-                    </div>
-
-                    {/* Top Specular Arc Highlight */}
-                    <div className="absolute inset-x-2 top-0.5 h-[35%] rounded-t-3xl bg-gradient-to-b from-white/25 via-white/5 to-transparent pointer-events-none" />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Left / Right Quick Control Chevrons */}
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              rotateTo('prev');
-            }}
-            className="absolute left-2 sm:left-4 z-40 w-10 h-10 rounded-full bg-white/85 backdrop-blur-md border border-slate-300 shadow-md text-slate-800 hover:text-slate-950 hover:scale-110 active:scale-95 transition-all flex items-center justify-center cursor-pointer"
-            aria-label="Previous project"
+          {/* Rotating Decorative Compass SVG Ring */}
+          <svg
+            className="w-full h-full animate-[spin_55s_linear_infinite]"
+            viewBox="0 0 400 400"
+            style={{ animationPlayState: isHovered ? 'paused' : 'running' }}
           >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              rotateTo('next');
-            }}
-            className="absolute right-2 sm:right-4 z-40 w-10 h-10 rounded-full bg-white/85 backdrop-blur-md border border-slate-300 shadow-md text-slate-800 hover:text-slate-950 hover:scale-110 active:scale-95 transition-all flex items-center justify-center cursor-pointer"
-            aria-label="Next project"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
+            <defs>
+              <path
+                id="portfolioCirclePath"
+                d="M 200, 200 m -160, 0 a 160,160 0 1,1 320,0 a 160,160 0 1,1 -320,0"
+              />
+            </defs>
+            <text className="text-[10px] font-mono tracking-[0.28em] uppercase fill-slate-400 font-bold">
+              <textPath href="#portfolioCirclePath" startOffset="0%">
+                PORTFOLIO • SELECTED WORK • AI GENERALIST • QDELTA TECH • MOHAMMED QAIS • 
+              </textPath>
+            </text>
+          </svg>
         </div>
 
-        {/* ================= PROJECT DETAILS BELOW DIAL (Reveals on Hover / Auto Updates) ================= */}
+        {/* ================= FANNED CARDS (Full-Bleed Across Entire Window Width) ================= */}
+        <div className="absolute top-4 sm:top-6 left-1/2 -translate-x-1/2 w-full h-full flex items-center justify-center pointer-events-none">
+          {WHEEL_CARDS.map((project, idx) => {
+            // Calculate angular position on the virtual cylinder/arc
+            const rawAngle = (angle + idx * STEP_ANGLE) % 360;
+            const normalizedAngle = ((rawAngle + 180) % 360) - 180; // range [-180, 180]
+
+            // Visible range across the full width of the monitor (up to 88 deg off center)
+            if (Math.abs(normalizedAngle) > 88) return null;
+
+            const rad = (normalizedAngle * Math.PI) / 180;
+            const x = radius * Math.sin(rad);
+            const y = radius * (1 - Math.cos(rad)) * 0.65; // gentle upward dome
+
+            // Tangential tilt angle
+            const rotateDeg = normalizedAngle * 0.78;
+
+            // Fade only at the very extreme window edges
+            const opacity = Math.max(0, 1 - Math.pow(Math.abs(normalizedAngle) / 84, 4));
+
+            // Depth layer: cards closest to apex (0 deg) have highest z-index
+            const isHoveredCard = hoveredCardIdx === idx;
+            const zIndex = isHoveredCard ? 70 : Math.round(50 - Math.abs(normalizedAngle));
+
+            return (
+              <div
+                key={`${project.id}-${idx}`}
+                onMouseEnter={() => setHoveredCardIdx(idx)}
+                className="absolute pointer-events-auto transition-transform duration-200 ease-out origin-bottom cursor-pointer"
+                style={{
+                  transform: `translate3d(calc(-50% + ${x}px), ${y}px, 0) rotate(${rotateDeg}deg) scale(${
+                    isHoveredCard ? 1.08 : 1
+                  })`,
+                  zIndex,
+                  opacity,
+                }}
+              >
+                {/* Card Container: Razor-Sharp High-Resolution Poster Card */}
+                <div
+                  className={`relative w-[210px] sm:w-[250px] md:w-[270px] h-[290px] sm:h-[340px] md:h-[370px] rounded-3xl overflow-hidden border transition-all duration-300 ${
+                    isHoveredCard
+                      ? 'border-violet-400 ring-4 ring-violet-500/30 shadow-[0_30px_70px_-10px_rgba(124,58,237,0.5)] -translate-y-5'
+                      : 'border-slate-800 shadow-[0_18px_40px_rgba(15,23,42,0.25)]'
+                  } bg-slate-950 flex flex-col justify-between p-4 text-white group`}
+                >
+                  {/* Top Status & Index Badge */}
+                  <div className="relative z-10 flex items-center justify-between">
+                    <span className="px-2.5 py-1 rounded-full text-[10.5px] font-mono font-bold tracking-wider uppercase bg-slate-950/70 backdrop-blur-md text-white border border-white/20 shadow-xs">
+                      {project.tags[0] || 'FEATURED'}
+                    </span>
+                    <span className="px-2 py-0.5 rounded-full text-[10.5px] font-mono font-bold bg-black/50 backdrop-blur-xs text-slate-300 border border-white/10">
+                      0{((idx % PROJECTS_LIST.length) + 1)}
+                    </span>
+                  </div>
+
+                  {/* Razor-Sharp Full-Bleed Project Visual */}
+                  <div className="absolute inset-0 w-full h-full overflow-hidden bg-slate-900">
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className={`w-full h-full object-cover transition-transform duration-500 ${
+                        isHoveredCard ? 'scale-105 brightness-105' : 'scale-100 brightness-100'
+                      }`}
+                      style={{
+                        imageRendering: '-webkit-optimize-contrast',
+                      }}
+                      loading="eager"
+                    />
+                    {/* Bottom Vignette for Title Readability while keeping artwork sharp */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/95 via-slate-950/30 to-transparent" />
+                  </div>
+
+                  {/* Bottom Title on Card */}
+                  <div className="relative z-10 pt-4">
+                    <h3 className="text-base sm:text-lg font-black tracking-tight text-white line-clamp-1 drop-shadow-md">
+                      {project.title}
+                    </h3>
+                    <p className="text-[11.5px] text-slate-200 font-medium line-clamp-1 drop-shadow-sm mt-0.5">
+                      {project.description}
+                    </p>
+                  </div>
+
+                  {/* Top Specular Arc Glass Highlight */}
+                  <div className="absolute inset-x-2 top-0.5 h-[35%] rounded-t-3xl bg-gradient-to-b from-white/25 via-white/5 to-transparent pointer-events-none" />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Full-Bleed Navigation Chevrons pinned to true screen edges */}
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            rotateTo('prev');
+          }}
+          className="absolute left-3 sm:left-6 z-40 w-11 h-11 rounded-full bg-white/90 backdrop-blur-md border border-slate-300 shadow-lg text-slate-900 hover:scale-110 active:scale-95 transition-all flex items-center justify-center cursor-pointer"
+          aria-label="Previous project"
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            rotateTo('next');
+          }}
+          className="absolute right-3 sm:right-6 z-40 w-11 h-11 rounded-full bg-white/90 backdrop-blur-md border border-slate-300 shadow-lg text-slate-900 hover:scale-110 active:scale-95 transition-all flex items-center justify-center cursor-pointer"
+          aria-label="Next project"
+        >
+          <ChevronRight className="w-5 h-5" />
+        </button>
+      </div>
+
+      {/* ================= PROJECT DETAILS BELOW DIAL ================= */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeProject.id}
@@ -300,7 +315,7 @@ export const ProjectsSection: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full max-w-xl mx-auto mt-4 sm:mt-6 p-5 sm:p-6 rounded-3xl bg-white/85 backdrop-blur-xl border border-slate-900/10 shadow-[0_20px_50px_-15px_rgba(15,23,42,0.08),inset_0_1px_1px_rgba(255,255,255,1)] flex flex-col items-center text-center space-y-3"
+            className="w-full max-w-xl mx-auto mt-4 sm:mt-6 p-5 sm:p-6 rounded-3xl bg-white/90 backdrop-blur-xl border border-slate-900/10 shadow-[0_20px_50px_-15px_rgba(15,23,42,0.08),inset_0_1px_1px_rgba(255,255,255,1)] flex flex-col items-center text-center space-y-3"
           >
             {/* Category Pill with Active Status */}
             <div className="flex items-center gap-2">
@@ -349,7 +364,6 @@ export const ProjectsSection: React.FC = () => {
             </div>
           </motion.div>
         </AnimatePresence>
-
       </div>
     </section>
   );
