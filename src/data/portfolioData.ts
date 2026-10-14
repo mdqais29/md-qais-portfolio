@@ -1,0 +1,458 @@
+export interface NavItem {
+  label: string;
+  href: string;
+}
+
+export interface ExpertiseItem {
+  id: string;
+  title: string;
+  icon: string;
+  description?: string;
+}
+
+export interface SocialLink {
+  name: string;
+  href: string;
+  icon: string;
+  ariaLabel: string;
+}
+
+export interface ServiceItem {
+  id: string;
+  number: string;
+  title: string;
+  description: string;
+  tags: string[];
+}
+
+export interface ProjectItem {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  tags: string[];
+  link: string;
+  linkText: string;
+}
+
+export const PERSONAL_INFO = {
+  name: "Mohammed Qaisuddin",
+  initials: "MQ",
+  title: "AI Generalist",
+  eyebrow: "AI GENERALIST",
+  tagline: "Founder of QDelta Technologies",
+  headlinePrefix: "I turn ideas into useful ",
+  headlineHighlight: "digital experiences.",
+  intro: "I Combine Design, Development, Automation, Strategy & AI to build practical digital solutions for businesses.",
+  primaryCta: "Explore My Work",
+  secondaryCta: "Get in Touch",
+  statusText: "Open to Client Projects & Remote Work",
+  email: "qaismd29@gmail.com",
+  github: "https://github.com/mdqais29",
+  businessSite: "https://www.qdelta.in/",
+  linkedin: "https://www.linkedin.com/in/mdqais29",
+  portraitSrc: "/images/qais-portrait-hero.png",
+  logoSrc: "/images/mq-logo.png",
+};
+
+export const NAV_ITEMS: NavItem[] = [
+  { label: "About", href: "#about" },
+  { label: "Services", href: "#services" },
+  { label: "Projects", href: "#projects" },
+  { label: "Experience", href: "#experience" },
+  { label: "Skills", href: "#skills" },
+  { label: "Certificates", href: "#certificates" },
+  { label: "Contact", href: "#contact" },
+];
+
+export const HERO_EXPERTISE_ITEMS: ExpertiseItem[] = [
+  { id: "ai-auto", title: "AI & Automation", icon: "sparkle" },
+  { id: "web-dev", title: "Web Development", icon: "code" },
+  { id: "ui-ux", title: "UI/UX Design", icon: "palette" },
+  { id: "digital-sys", title: "Digital Systems", icon: "layers" },
+];
+
+export const SOCIAL_LINKS: SocialLink[] = [
+  {
+    name: "GitHub",
+    href: PERSONAL_INFO.github,
+    icon: "github",
+    ariaLabel: "Visit Mohammed Qaisuddin's GitHub Profile",
+  },
+  {
+    name: "LinkedIn",
+    href: PERSONAL_INFO.linkedin,
+    icon: "linkedin",
+    ariaLabel: "Connect with Mohammed Qaisuddin on LinkedIn",
+  },
+  {
+    name: "Website",
+    href: PERSONAL_INFO.businessSite,
+    icon: "globe",
+    ariaLabel: "Visit QDelta Technologies Website",
+  },
+];
+
+export const TICKER_ITEMS = [
+  "WEB DEVELOPMENT",
+  "UI/UX",
+  "LEAD CAPTURE SYSTEMS",
+  "AI AUTOMATION",
+  "CONTENT CREATION",
+  "SOCIAL MEDIA MARKETING",
+  "LANDING PAGE OPTIMIZATION",
+];
+
+export const SERVICES_SECTION_DATA = {
+  label: "My Specialization",
+  headingPrefix: "Services ",
+  headingHighlight: "I Provide",
+  description: "Practical digital solutions that turn ideas into useful products, automations, and modern web experiences for ambitious businesses.",
+  scriptText: "From ideas to real solutions",
+};
+
+export const SERVICES_LIST: ServiceItem[] = [
+  {
+    id: "ai-automation",
+    number: "01",
+    title: "AI & Workflow Automation",
+    description: "Help businesses automate repetitive tasks and connect tools using AI-powered workflows to save time and improve productivity.",
+    tags: ["Make", "n8n", "ChatGPT", "AI Automation", "Workflow Design"],
+  },
+  {
+    id: "websites",
+    number: "02",
+    title: "Websites & Digital Experiences",
+    description: "Modern, responsive websites, landing pages, and conversion-focused digital experiences built for speed and engagement.",
+    tags: ["React", "Next.js", "Tailwind CSS", "Responsive Web", "SEO"],
+  },
+  {
+    id: "ui-ux",
+    number: "03",
+    title: "UI/UX & Product Design",
+    description: "User-focused interface design, wireframes, prototypes, and polished design systems created with modern precision.",
+    tags: ["Figma", "Wireframing", "Prototypes", "Design Systems", "UI/UX"],
+  },
+  {
+    id: "digital-products",
+    number: "04",
+    title: "AI-Powered Digital Products",
+    description: "AI-enabled web applications and practical digital tools designed around real user needs.",
+    tags: ["Generative AI", "Web Apps", "APIs", "Cursor", "AI Prototyping"],
+  },
+  {
+    id: "digital-systems",
+    number: "05",
+    title: "Digital Systems & Architecture",
+    description: "Robust digital infrastructure, custom API integrations, and scalable software architecture designed for reliability.",
+    tags: ["System Architecture", "Cloud APIs", "Database Design", "Scalability", "DevOps"],
+  },
+];
+
+export const PROJECTS_SECTION_DATA = {
+  label: "MY WORK",
+  headingPrefix: "Selected ",
+  headingHighlight: "Projects",
+  description: "A collection of digital experiences across web development, AI, design, and digital products.",
+  viewAllLink: "#projects",
+  viewAllText: "View All Projects",
+};
+
+export const PROJECTS_LIST: ProjectItem[] = [
+  {
+    id: "gsa",
+    title: "Global Safety Academy",
+    description: "A modern, animated website for a safety training institute, built with Next.js.",
+    image: "/images/projects/global-safety-academy.png",
+    tags: ["Next.js", "Website"],
+    link: "https://www.globalsafetyacademy.com/",
+    linkText: "View project",
+  },
+  {
+    id: "sentiment-analyser",
+    title: "AI Sentiment Analyser",
+    description: "A Python-based NLP application that classifies text sentiment as positive, negative, or neutral.",
+    image: "/images/projects/ai-sentiment-analyser.png",
+    tags: ["Python", "NLP"],
+    link: "https://ai-sentiment-analyser.netlify.app/",
+    linkText: "View project",
+  },
+  {
+    id: "flowdesk",
+    title: "FlowDesk",
+    description: "A web application project designed for streamlined task tracking and productivity workflows.",
+    image: "/images/projects/flowdesk.png",
+    tags: ["Web App", "Productivity"],
+    link: "https://flowdesk123.netlify.app/",
+    linkText: "View project",
+  },
+  {
+    id: "fresh-laundry",
+    title: "Fresh Laundry",
+    description: "A UI/UX design case study focused on a modern laundry service, created in Figma.",
+    image: "/images/projects/fresh-laundry.png",
+    tags: ["Figma", "UI/UX"],
+    link: "https://www.figma.com/design/s25K1h3V88yAPuYTg9zIX9/UI-UX?node-id=2002-456",
+    linkText: "View project",
+  },
+  {
+    id: "pretty-good-pdf",
+    title: "Pretty Good PDF",
+    description: "A web-based PDF project with useful client-side tools for document manipulation.",
+    image: "/images/projects/pretty-good-pdf.png",
+    tags: ["Web Tool", "Productivity"],
+    link: "https://www.prettygoodpdf.site/",
+    linkText: "View project",
+  },
+  {
+    id: "qdelta",
+    title: "QDelta Technologies",
+    description: "My business website representing my venture in AI automation and digital solutions.",
+    image: "/images/projects/qdelta-technologies.png",
+    tags: ["Next.js", "Business"],
+    link: "https://www.qdelta.in/",
+    linkText: "View project",
+  },
+];
+
+/* ==========================================================================
+   EXPERIENCE SECTION DATA
+   ========================================================================== */
+export interface ExperienceItem {
+  id: string;
+  step: string;
+  role: string;
+  organization: string;
+  location?: string;
+  period: string;
+  description: string;
+}
+
+export const EXPERIENCE_SECTION_DATA = {
+  label: "MY JOURNEY",
+  headingPrefix: "Experi",
+  headingHighlight: "ence",
+  description: "Roles and opportunities that have shaped my skills and professional journey.",
+};
+
+export const EXPERIENCE_LIST: ExperienceItem[] = [
+  {
+    id: "freelance-dev",
+    step: "01",
+    role: "Freelance Web Designer & Developer",
+    organization: "Independent",
+    location: "Remote",
+    period: "2024 – 2026",
+    description: "Designed and developed websites and digital experiences, focusing on responsive layouts, modern interfaces, usability, and client requirements.",
+  },
+  {
+    id: "gsa-intern",
+    step: "02",
+    role: "Web Developer & Digital Support Intern",
+    organization: "Global Safety Academy",
+    location: "Nalgonda, Telangana",
+    period: "October 2025 – September 2026",
+    description: "Developed and maintained the institute's website while supporting website improvements, digital content, branding, and internal documentation.",
+  },
+  {
+    id: "codtech-intern",
+    step: "03",
+    role: "Artificial Intelligence Intern",
+    organization: "CODTECH IT Solutions Pvt. Ltd.",
+    location: "Remote",
+    period: "7 January 2026 – 4 March 2026",
+    description: "Artificial intelligence internship experience with practical applications and tools.",
+  },
+  {
+    id: "wts-nova",
+    step: "04",
+    role: "Operations Manager",
+    organization: "WTS Nova (a social media agency)",
+    location: "Hybrid",
+    period: "August 2026 – Present",
+    description: "Supports agency operations, team coordination, project execution, and digital service delivery.",
+  },
+  {
+    id: "qdelta-founder",
+    step: "05",
+    role: "Founder & CEO",
+    organization: "QDelta Technologies",
+    location: "Remote / Hyderabad",
+    period: "September 2026 – Present",
+    description: "Founded and leads a digital venture focused on website development and modern digital experiences, with plans to expand into AI-powered solutions.",
+  },
+];
+
+/* ==========================================================================
+   SKILLS & TOOLS SECTION DATA
+   ========================================================================== */
+export interface SkillCategory {
+  id: string;
+  title: string;
+  iconName: string;
+  skills: string[];
+}
+
+export const SKILLS_SECTION_DATA = {
+  label: "MY TOOLKIT",
+  headingPrefix: "Skills & ",
+  headingHighlight: "Tools",
+  description: "Technologies and tools I work with across development, AI, design, and business.",
+};
+
+export const ESTABLISHED_SKILL_CATEGORIES: SkillCategory[] = [
+  {
+    id: "web-dev",
+    title: "Web Development",
+    iconName: "code",
+    skills: ["HTML", "CSS", "JavaScript", "React", "Next.js", "Python", "Web Development", "Web Design", "Git", "GitHub"],
+  },
+  {
+    id: "ai-data",
+    title: "AI & Data",
+    iconName: "brain",
+    skills: ["Generative AI", "Machine Learning", "Data Analysis", "AI Orchestration", "AI Automation", "Prompt Engineering"],
+  },
+  {
+    id: "automation-coding",
+    title: "Automation & AI Coding",
+    iconName: "zap",
+    skills: ["Make", "n8n", "ChatGPT", "Claude Code", "Cursor", "Antigravity"],
+  },
+  {
+    id: "design-content",
+    title: "Design & Content",
+    iconName: "pen-tool",
+    skills: ["UI/UX Design", "Figma", "Canva", "Graphic Design", "Content Writing"],
+  },
+  {
+    id: "business-ops",
+    title: "Business & Operations",
+    iconName: "briefcase",
+    skills: ["CRM Management", "Social Media Marketing", "Sales Funnels"],
+  },
+  {
+    id: "productivity",
+    title: "Productivity",
+    iconName: "check-circle",
+    skills: ["Microsoft Office", "Google Workspace"],
+  },
+];
+
+export const LEARNING_CATEGORY: SkillCategory = {
+  id: "learning-exploring",
+  title: "Learning & Exploring",
+  iconName: "compass",
+  skills: ["Google AI Studio", "Pandas", "NumPy", "Supabase", "REST APIs", "Vercel"],
+};
+
+/* ==========================================================================
+   EDUCATION & CERTIFICATIONS DATA
+   ========================================================================== */
+export interface EducationItem {
+  id: string;
+  degree: string;
+  institution: string;
+  location: string;
+  period: string;
+  gradeLabel: string;
+  gradeValue: string;
+}
+
+export interface CertificationItem {
+  id: string;
+  number: string;
+  title: string;
+  issuer: string;
+  detail?: string;
+}
+
+export const EDUCATION_SECTION_DATA = {
+  label: "LEARNING",
+  headingPrefix: "Education & ",
+  headingHighlight: "Certificates",
+  description: "My academic background and certifications in AI, development and design.",
+};
+
+export const EDUCATION_LIST: EducationItem[] = [
+  {
+    id: "btech-it",
+    degree: "Bachelor of Technology — Information Technology",
+    institution: "Guru Nanak Institute of Technology",
+    location: "Hyderabad, Telangana",
+    period: "2021 – 2025",
+    gradeLabel: "CGPA",
+    gradeValue: "7.92 / 10",
+  },
+  {
+    id: "ssc",
+    degree: "Secondary School Certificate (SSC)",
+    institution: "Kakatiya High School",
+    location: "Miryalguda, Telangana",
+    period: "Completed",
+    gradeLabel: "GPA",
+    gradeValue: "9.7 / 10",
+  },
+];
+
+export const CERTIFICATIONS_LIST: CertificationItem[] = [
+  {
+    id: "naukri-young-turks",
+    number: "01",
+    title: "Naukri Campus Young Turks — Certificate of Merit",
+    issuer: "Naukri Campus",
+    detail: "97.14th percentile in Young Turks 2025",
+  },
+  {
+    id: "oci-gen-ai",
+    number: "02",
+    title: "Oracle Cloud Infrastructure 2025 Certified Generative AI Professional",
+    issuer: "Oracle",
+  },
+  {
+    id: "oci-foundations",
+    number: "03",
+    title: "Oracle Cloud Infrastructure 2025 Certified Foundations Associate",
+    issuer: "Oracle",
+  },
+  {
+    id: "gen-ai-foundations",
+    number: "04",
+    title: "Generative AI Foundations",
+    issuer: "Microsoft & upGrad",
+  },
+  {
+    id: "software-dev-fundamentals",
+    number: "05",
+    title: "Software Development Fundamentals",
+    issuer: "Simplilearn SkillUp",
+  },
+  {
+    id: "gen-ai-mastermind",
+    number: "06",
+    title: "Generative AI Mastermind — Certificate of Completion",
+    issuer: "Outskill",
+  },
+  {
+    id: "uiux-design",
+    number: "07",
+    title: "UI/UX Design Certificate",
+    issuer: "Tutedude",
+  },
+];
+
+/* ==========================================================================
+   CONTACT SECTION DATA
+   ========================================================================== */
+export const CONTACT_SECTION_DATA = {
+  label: "LET'S WORK TOGETHER",
+  heading: "Have a project in mind?",
+  subtitle: "Let's create something useful.",
+  primaryCtaText: "Get in Touch",
+  secondaryCtaText: "Visit QDelta",
+  email: PERSONAL_INFO.email,
+  businessSite: PERSONAL_INFO.businessSite,
+  github: PERSONAL_INFO.github,
+  statusText: PERSONAL_INFO.statusText,
+};
+
